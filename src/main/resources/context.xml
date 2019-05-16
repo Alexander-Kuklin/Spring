@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder location="application.properties"/>
+
+    <util:constant static-field="java.lang.System.in" id="systemIn"/>
+
+    <bean class="org.apache.commons.dbcp2.BasicDataSource" name="basicDataSource">
+        <property name="defaultAutoCommit" value="false"/>
+        <property name="rollbackOnReturn" value="true"/>
+        <property name="driverClassName" value="${db.driver}"/>
+        <property name="url" value="${db.url}"/>
+        <property name="username" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
+        <property name="initialSize" value="${db.pool.initSize}"/>
+        <property name="maxTotal" value="${db.pool.maxSize}"/>
+    </bean>
+
+    <bean id="applicationContextProvider" class="com.epam.spring.util.ApplicationContextProvider"/>
+
+    <bean class="java.util.HashMap" name="hashMap" scope="prototype"/>
+    <bean class="java.util.ArrayList" name="arrayList" scope="prototype"/>
+
+    <bean class="com.epam.spring.entity.Product" scope="prototype"/>
+    <bean class="com.epam.spring.entity.ProductCategory" scope="prototype"/>
+    <bean class="com.epam.spring.entity.Order" scope="prototype"/>
+    <bean class="com.epam.spring.entity.OrderItem" scope="prototype"/>
+    <bean class="com.epam.spring.entity.User" name="user" scope="prototype"/>
+    <bean class="com.epam.spring.entity.Coupon" scope="prototype"/>
+
+    <bean class="com.epam.spring.service.impl.ProductServiceImpl" name="productService">
+        <constructor-arg ref="basicDataSource"/>
+    </bean>
+
+    <bean class="com.epam.spring.service.impl.UserServiceImpl" name="userService">
+        <constructor-arg ref="basicDataSource"/>
+    </bean>
+
+    <bean class="com.epam.spring.service.impl.OrderServiceImpl" name="orderService">
+        <constructor-arg ref="basicDataSource"/>
+    </bean>
+
+    <bean class="com.epam.spring.service.impl.CouponServiceImpl" name="couponService">
+        <constructor-arg ref="basicDataSource"/>
+    </bean>
+
+    <bean name="ProductRepositoryImpl" class="com.epam.spring.repository.impl.ProductRepositoryImpl">
+        <property name="productService" ref="productService"/>
+    </bean>
+
+    <bean name="OrderRepositoryImpl" class="com.epam.spring.repository.impl.OrderRepositoryImpl">
+        <property name="orderService" ref="orderService"/>
+        <property name="couponService" ref="couponService"/>
+    </bean>
+
+    <bean name="UserRepositoryImpl" class="com.epam.spring.repository.impl.UserRepositoryImpl">
+        <property name="userService" ref="userService"/>
+    </bean>
+
+    <bean name="ParseProductToDB" class="com.epam.spring.parsers.ParseProductToDB">
+        <constructor-arg name="productRepository" ref="ProductRepositoryImpl"/>
+    </bean>
+
+    <bean name="ConsoleView" class="com.epam.spring.view.ConsoleView">
+        <property name="productRepositoryImpl" ref="ProductRepositoryImpl"/>
+        <property name="parseProductToDB" ref="ParseProductToDB"/>
+        <property name="orderRepository" ref="OrderRepositoryImpl"/>
+        <property name="userRepositoryImpl" ref="UserRepositoryImpl"/>
+        <property name="bufferedReader" ref="bufferedReaderConsole"/>
+    </bean>
+
+    <bean class="java.io.InputStreamReader" name="inputStreamReader">
+        <constructor-arg name="in" ref="systemIn"/>
+    </bean>
+
+    <bean class="java.io.BufferedReader" name="bufferedReaderConsole">
+        <constructor-arg name="in" ref="inputStreamReader"/>
+    </bean>
+
+</beans>
