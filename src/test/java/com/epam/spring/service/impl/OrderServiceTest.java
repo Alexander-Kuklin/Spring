@@ -16,6 +16,10 @@ import org.mockito.Mock;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.modules.junit4.PowerMockRunnerDelegate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -28,12 +32,15 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({JDBCUtils.class})
+@PowerMockRunnerDelegate(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("/context_test.xml")
+@PrepareForTest(JDBCUtils.class)
 public class OrderServiceTest {
 
+    @Autowired
     private OrderService orderService;
 
-    @Mock
+    @Autowired
     private BasicDataSource dataSource;
 
     @Mock
@@ -42,7 +49,6 @@ public class OrderServiceTest {
     @Before
     public void setUp() throws SQLException {
         when(dataSource.getConnection()).thenReturn(connection);
-        orderService = new OrderServiceImpl(dataSource);
     }
 
     @Test

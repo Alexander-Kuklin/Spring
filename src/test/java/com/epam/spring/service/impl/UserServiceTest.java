@@ -14,6 +14,10 @@ import org.mockito.Mock;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.modules.junit4.PowerMockRunnerDelegate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.security.auth.login.FailedLoginException;
 import javax.sql.DataSource;
@@ -24,21 +28,23 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
+@PowerMockRunnerDelegate(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("/context_test.xml")
 @PrepareForTest(JDBCUtils.class)
 public class UserServiceTest {
 
+    @Autowired
     private UserService userService;
+
+    @Autowired
+    private BasicDataSource dataSource;
 
     @Mock
     private Connection connection;
 
-    @Mock
-    private BasicDataSource dataSource;
-
     @Before
     public void setUp() throws Exception{
         when(dataSource.getConnection()).thenReturn(connection);
-        userService = new UserServiceImpl(dataSource);
     }
 
     @Test

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean class="org.mockito.Mockito" factory-method="mock" name="MockDataSource">
+        <constructor-arg value="org.apache.commons.dbcp2.BasicDataSource"/>
+    </bean>
+
+    <bean class="com.epam.spring.entity.Product" scope="prototype"/>
+    <bean class="com.epam.spring.entity.ProductCategory" scope="prototype"/>
+    <bean class="com.epam.spring.entity.Order" scope="prototype"/>
+    <bean class="com.epam.spring.entity.OrderItem" scope="prototype"/>
+    <bean class="com.epam.spring.entity.User" name="user" scope="prototype"/>
+    <bean class="com.epam.spring.entity.Coupon" scope="prototype"/>
+
+    <bean class="com.epam.spring.service.impl.ProductServiceImpl" name="productService">
+        <constructor-arg ref="MockDataSource"/>
+    </bean>
+
+    <bean class="com.epam.spring.service.impl.UserServiceImpl" name="userService">
+        <constructor-arg ref="MockDataSource"/>
+    </bean>
+
+    <bean class="com.epam.spring.service.impl.OrderServiceImpl" name="orderService">
+        <constructor-arg ref="MockDataSource"/>
+    </bean>
+
+    <bean class="com.epam.spring.service.impl.CouponServiceImpl" name="couponService">
+        <constructor-arg ref="MockDataSource"/>
+    </bean>
+
+</beans>
