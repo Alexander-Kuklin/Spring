@@ -8,18 +8,14 @@ import java.util.List;
 
 public interface ProductService {
 
-    List<Product> getListProduct();
+    Product addProduct(int idCategory, String alias, String title, String textShort, String textFull,
+                       double price, int qty, User user);
 
-    List<Product> getListProductByCategory(int idCategory);
+    Product getProductById(int productId);
+
+    List<Product> getListProduct();
 
     List<ProductCategory> getListProductCategory();
 
-    Product getProductById(int id);
-
-    ProductCategory getProductCategoryById(int id);
-
-    int addProductCategory(int idParent, String alias, String title, String text, User user);
-
-    int addProduct(int idCategory, String alias, String title, String textShort, String textFull,
-                   double price, int qty, User user);
+    ProductCategory addProductCategory(int idParent, String alias, String title, String text, User user);
 }

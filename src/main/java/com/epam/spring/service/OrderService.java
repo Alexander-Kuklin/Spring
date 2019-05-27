@@ -1,33 +1,30 @@
 package com.epam.spring.service;
 
+import com.epam.spring.entity.Coupon;
 import com.epam.spring.entity.Order;
 import com.epam.spring.entity.OrderItem;
-import com.epam.spring.entity.OrderStatus;
 import com.epam.spring.entity.User;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface OrderService {
 
-    List<Order> getListOrderUserWithStatus(User user, OrderStatus orderStatus);
+    void addProductQtyInCart(int productId, int qty, User user);
+
+    Order getUserCart(User user);
+
+    List<OrderItem> getListOrderItem(Order userOrder);
 
     List<Order> getListOrderUser(User user);
 
-    List<OrderItem> getListOrderItem(int idOrderCart);
+    Coupon addCoupon(int idCategory, String nameCoupon, boolean percent, int discount, int minSum,
+                     LocalDate startDateDiscount, LocalDate endDateDiscount, User user);
 
-    Order getOrder(int idOrder);
+    void modifyProductQtyInCart(int idProduct, int qty, User user);
 
-    int addProductQtyInOrder(Order order, User user, int idProduct, int qty);
+    void deleteProductFromCart(int idProduct, User user);
 
-    int addNewUserOrderWithStatusCart(User user);
-
-    OrderItem modifyProductQtyInOrderItem(Order order, User user, int idProduct, int qty);
-
-    void deleteOrderItem(Order order, int idProduct, User user);
-
-    void confirmOrder(User user, int idOrder);
-
-    void refreshOrderPrice(int idOrder);
-
+    void confirmOrderCart(Order order, User user);
 
 }

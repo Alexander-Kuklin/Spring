@@ -4,10 +4,11 @@ import com.epam.spring.entity.Product;
 import com.epam.spring.entity.ProductCategory;
 import com.epam.spring.entity.User;
 import com.epam.spring.exception.ExceptionFactory;
-import com.epam.spring.repository.ProductRepository;
+import com.epam.spring.service.ProductService;
 import com.epam.spring.util.ApplicationContextProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -25,13 +26,11 @@ import java.util.Map;
 public class ParseProductToDB {
     private static final Logger LOGGER = LoggerFactory.getLogger(ParseProductToDB.class);
     private ApplicationContext context = ApplicationContextProvider.getApplicationContext();
-    private ProductRepository productRepository;
+
+    @Autowired
+    private ProductService productService;
     private final String SEPARATOR = ";";
 
-
-    public ParseProductToDB(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
 
     //            Integer.valueOf(productArrays[0]),    idCategory
 //            productArrays[1].trim(),              alias
@@ -56,17 +55,17 @@ public class ParseProductToDB {
                     continue;
                 }
                 if (mapIdCategory.containsKey(productArrays[0].trim())) {
-                    Product product = productRepository.addProduct(mapIdCategory.get(productArrays[0].trim()), productArrays[1].trim(),
+                    Product product = productService.addProduct(mapIdCategory.get(productArrays[0].trim()), productArrays[1].trim(),
                             productArrays[2].trim(), productArrays[3].trim(), productArrays[4].trim(),
                             Double.valueOf(productArrays[5].trim()), Integer.valueOf(productArrays[6].trim()), user);
                     LOGGER.info("Add new product, id: " + product.getId() + " ,title: " + product.getTitle() +
                             ", price:" + product.getPrice());
                 } else {
-                    ProductCategory productCategory = productRepository.addProductCategory(8, "", productArrays[0].trim(),
+                    ProductCategory productCategory = productService.addProductCategory(8, "", productArrays[0].trim(),
                             productArrays[0].trim(), user);
                     LOGGER.info("Add new product category id: " + productCategory.getId() + ", title:" + productCategory.getTitle());
 
-                    Product product = productRepository.addProduct(productCategory.getId(), productArrays[1].trim(),
+                    Product product = productService.addProduct(productCategory.getId(), productArrays[1].trim(),
                             productArrays[2].trim(), productArrays[3].trim(), productArrays[4].trim(),
                             Double.valueOf(productArrays[5].trim()), Integer.valueOf(productArrays[6].trim()), user);
 
@@ -82,7 +81,7 @@ public class ParseProductToDB {
     }
 
     private Map<String, Integer> getMapIdCategory() {
-        List<ProductCategory> productCategories = productRepository.getListProductCategory();
+        List<ProductCategory> productCategories = productService.getListProductCategory();
         Map<String, Integer> map = context.getBean(HashMap.class);
         for (ProductCategory pc : productCategories) {
             map.put(pc.getTitle(), pc.getId());

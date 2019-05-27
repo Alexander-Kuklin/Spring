@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <context:property-placeholder location="application.properties"/>
-
     <util:constant static-field="java.lang.System.in" id="systemIn"/>
+    <context:annotation-config/>
+
+    <bean name="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="persistenceUnitName" value="MyUnit"/>
+        <property name="dataSource" ref="basicDataSource"/>
+    </bean>
+
+    <bean name="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+    <tx:annotation-driven/>
+
+    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"
+          name="persistenceExceptionTranslationPostProcessor"/>
 
     <bean class="org.apache.commons.dbcp2.BasicDataSource" name="basicDataSource">
         <property name="defaultAutoCommit" value="false"/>
@@ -21,6 +34,16 @@
 
     <bean id="applicationContextProvider" class="com.epam.spring.util.ApplicationContextProvider"/>
 
+    <bean class="com.epam.spring.dao.CouponRepositoryImpl" name="couponRepository"/>
+    <bean class="com.epam.spring.dao.OrderItemRepositoryImpl" name="orderItemRepository"/>
+    <bean class="com.epam.spring.dao.OrderRepositoryImpl" name="orderRepository"/>
+    <bean class="com.epam.spring.dao.ProductRepositoryImpl" name="productRepository"/>
+    <bean class="com.epam.spring.dao.UserRepositoryImpl" name="userRepository"/>
+
+    <bean class="com.epam.spring.service.impl.ProductServiceImpl" name="productService"/>
+    <bean class="com.epam.spring.service.impl.OrderServiceImpl" name="orderService"/>
+    <bean class="com.epam.spring.service.impl.UserServiceImpl" name="userService"/>
+
     <bean class="java.util.HashMap" name="hashMap" scope="prototype"/>
     <bean class="java.util.ArrayList" name="arrayList" scope="prototype"/>
 
@@ -29,47 +52,17 @@
     <bean class="com.epam.spring.entity.Order" scope="prototype"/>
     <bean class="com.epam.spring.entity.OrderItem" scope="prototype"/>
     <bean class="com.epam.spring.entity.User" name="user" scope="prototype"/>
-    <bean class="com.epam.spring.entity.Coupon" scope="prototype"/>
-
-    <bean class="com.epam.spring.service.impl.ProductServiceImpl" name="productService">
-        <constructor-arg ref="basicDataSource"/>
+    <bean class="com.epam.spring.entity.Coupon" scope="prototype">
     </bean>
 
-    <bean class="com.epam.spring.service.impl.UserServiceImpl" name="userService">
-        <constructor-arg ref="basicDataSource"/>
-    </bean>
-
-    <bean class="com.epam.spring.service.impl.OrderServiceImpl" name="orderService">
-        <constructor-arg ref="basicDataSource"/>
-    </bean>
-
-    <bean class="com.epam.spring.service.impl.CouponServiceImpl" name="couponService">
-        <constructor-arg ref="basicDataSource"/>
-    </bean>
-
-    <bean name="ProductRepositoryImpl" class="com.epam.spring.repository.impl.ProductRepositoryImpl">
-        <property name="productService" ref="productService"/>
-    </bean>
-
-    <bean name="OrderRepositoryImpl" class="com.epam.spring.repository.impl.OrderRepositoryImpl">
-        <property name="orderService" ref="orderService"/>
-        <property name="couponService" ref="couponService"/>
-    </bean>
-
-    <bean name="UserRepositoryImpl" class="com.epam.spring.repository.impl.UserRepositoryImpl">
-        <property name="userService" ref="userService"/>
-    </bean>
-
-    <bean name="ParseProductToDB" class="com.epam.spring.parsers.ParseProductToDB">
-        <constructor-arg name="productRepository" ref="ProductRepositoryImpl"/>
-    </bean>
+    <bean name="ParseProductToDB" class="com.epam.spring.parsers.ParseProductToDB"/>
 
     <bean name="ConsoleView" class="com.epam.spring.view.ConsoleView">
-        <property name="productRepositoryImpl" ref="ProductRepositoryImpl"/>
         <property name="parseProductToDB" ref="ParseProductToDB"/>
-        <property name="orderRepository" ref="OrderRepositoryImpl"/>
-        <property name="userRepositoryImpl" ref="UserRepositoryImpl"/>
         <property name="bufferedReader" ref="bufferedReaderConsole"/>
+        <property name="orderService" ref="orderService"/>
+        <property name="productService" ref="productService"/>
+        <property name="userService" ref="userService"/>
     </bean>
 
     <bean class="java.io.InputStreamReader" name="inputStreamReader">

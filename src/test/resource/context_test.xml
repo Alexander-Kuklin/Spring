@@ -14,19 +14,19 @@
     <bean class="com.epam.spring.entity.User" name="user" scope="prototype"/>
     <bean class="com.epam.spring.entity.Coupon" scope="prototype"/>
 
-    <bean class="com.epam.spring.service.impl.ProductServiceImpl" name="productService">
+    <bean class="com.epam.spring.serviceOld.impl.ProductServiceImpl" name="productRepository">
         <constructor-arg ref="MockDataSource"/>
     </bean>
 
-    <bean class="com.epam.spring.service.impl.UserServiceImpl" name="userService">
+    <bean class="com.epam.spring.serviceOld.impl.UserServiceImpl" name="userService">
         <constructor-arg ref="MockDataSource"/>
     </bean>
 
-    <bean class="com.epam.spring.service.impl.OrderServiceImpl" name="orderService">
+    <bean class="com.epam.spring.serviceOld.impl.OrderServiceImpl" name="orderRepository">
         <constructor-arg ref="MockDataSource"/>
     </bean>
 
-    <bean class="com.epam.spring.service.impl.CouponServiceImpl" name="couponService">
+    <bean class="com.epam.spring.serviceOld.impl.CouponServiceImpl" name="couponRepository">
         <constructor-arg ref="MockDataSource"/>
     </bean>
 
