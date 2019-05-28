@@ -32,7 +32,7 @@ public class OrderServiceImpl implements OrderService {
     public void addProductQtyInCart(int idProduct, int qty, User user) {
         checkQty(qty);
         Order userCart = getUserCart(user);
-        List<OrderItem> orderItemList = orderItemRepository.getListOrderItem(userCart.getId());
+        List<OrderItem> orderItemList = orderItemRepository.getListOrderItem(userCart);
 
         for (OrderItem oi : orderItemList) {
             if (oi.getIdProduct() == idProduct) {
@@ -42,7 +42,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         OrderItem orderItem = new OrderItem();
-        orderItem.setIdOrder(userCart.getId());
+        orderItem.setOrder(userCart);//setIdOrder(userCart.getId());
         orderItem.setIdProduct(idProduct);
         orderItem.setQty(qty);
         orderItem.setCreateDate(MyTime.now().toLocalDateTime());
@@ -77,7 +77,7 @@ public class OrderServiceImpl implements OrderService {
             return;
         }
         Order userCart = getUserCart(user);
-        List<OrderItem> orderItemList = orderItemRepository.getListOrderItem(userCart.getId());
+        List<OrderItem> orderItemList = orderItemRepository.getListOrderItem(userCart);
 
         if (orderItemList.size() == 0) {
             throw ExceptionFactory.getIllegalArgumentException("User cart is empty");
@@ -89,7 +89,7 @@ public class OrderServiceImpl implements OrderService {
 
     public void deleteProductFromCart(int idProduct, User user) {
         Order userCart = getUserCart(user);
-        List<OrderItem> orderItemList = orderItemRepository.getListOrderItem(userCart.getId());
+        List<OrderItem> orderItemList = orderItemRepository.getListOrderItem(userCart);
 
         for (OrderItem oi : orderItemList) {
             if (oi.getIdProduct() == idProduct) {
@@ -111,7 +111,7 @@ public class OrderServiceImpl implements OrderService {
         if (listOrders.size() == 0) {
             Order order = new Order();
             order.setOrderStatus(OrderStatus.CART);
-            order.setIdUser(user.getId());
+            order.setUser(user);//setIdUser(user.getId());
             order.setCreateDate(MyTime.now().toLocalDateTime());
             order.setModifyDate(MyTime.now().toLocalDateTime());
             order.setLastModifyUser(user.getId());
@@ -121,11 +121,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public List<OrderItem> getListOrderItem(Order userOrder) {
-        return orderItemRepository.getListOrderItem(userOrder.getId());
+        return orderItemRepository.getListOrderItem(userOrder);
     }
 
     public List<Order> getListOrderUser(User user) {
-        return orderRepository.getListOrderUser(user);
+        return user.getOrders();
     }
 
     public Coupon addCoupon(int idCategory, String nameCoupon, boolean percent, int discount, int minSum,

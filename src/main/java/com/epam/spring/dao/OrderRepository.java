@@ -11,7 +11,7 @@ public interface OrderRepository {
 
     List<Order> getListOrderUserWithStatus(User user, OrderStatus orderStatus);
 
-    List<Order> getListOrderUser(User user);
+//    List<Order> getListOrderUser(User user);
 
     Order getOrder(int idOrder);
 

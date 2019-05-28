@@ -1,6 +1,7 @@
 package com.epam.spring.dao.impl;
 
 import com.epam.spring.dao.OrderItemRepository;
+import com.epam.spring.entity.Order;
 import com.epam.spring.entity.OrderItem;
 import com.epam.spring.entity.Product;
 import com.epam.spring.entity.User;
@@ -19,7 +20,7 @@ public class OrderItemRepositoryImpl implements OrderItemRepository {
     @Override
     public double getOrderSumPrice(int idOrder) {
         EntityManager em = entityManagerFactory.createEntityManager();
-        Double result = em.createQuery("SELECT SUM(price*qty) FROM OrderItem WHERE idOrder = :id", Double.class)
+        Double result = em.createQuery("SELECT SUM(price*qty) FROM OrderItem WHERE order = :id", Double.class)
                 .setParameter("id", idOrder)
                 .getSingleResult();
         em.close();
@@ -43,10 +44,10 @@ public class OrderItemRepositoryImpl implements OrderItemRepository {
     }
 
     @Override
-    public List<OrderItem> getListOrderItem(int idOrderCart) {
+    public List<OrderItem> getListOrderItem(Order orderCart) {
         EntityManager em = entityManagerFactory.createEntityManager();
-        List<OrderItem> resultList = em.createQuery("from OrderItem where idOrder = :idOrder", OrderItem.class)
-                .setParameter("idOrder", idOrderCart)
+        List<OrderItem> resultList = em.createQuery("from OrderItem where order = :idOrder", OrderItem.class)
+                .setParameter("idOrder", orderCart)
                 .getResultList();
         em.close();
         return resultList;

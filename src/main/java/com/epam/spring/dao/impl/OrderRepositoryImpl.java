@@ -19,25 +19,26 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     public List<Order> getListOrderUserWithStatus(User user, OrderStatus orderStatus) {
         EntityManager em = entityManagerFactory.createEntityManager();
-        String query = "FROM Order WHERE idUser = :user AND orderStatus = :orderStatus";
+        String query = "FROM Order WHERE user = :user AND orderStatus = :orderStatus";
         List<Order> resultList = em.createQuery(query, Order.class)
-                .setParameter("user", user.getId())
+                .setParameter("user", user)
                 .setParameter("orderStatus", orderStatus)
                 .getResultList();
         em.close();
         return resultList;
     }
 
-    @Override
-    public List<Order> getListOrderUser(User user) {
-        EntityManager em = entityManagerFactory.createEntityManager();
-        String query = "FROM Order WHERE idUser = :user";
-        List<Order> resultList = em.createQuery(query, Order.class)
-                .setParameter("user", user.getId())
-                .getResultList();
-        em.close();
-        return resultList;
-    }
+//    @Override
+//    public List<Order> getListOrderUser(User user) {
+////        EntityManager em = entityManagerFactory.createEntityManager();
+////        String query = "FROM Order WHERE user = :user";
+////        List<Order> resultList = em.createQuery(query, Order.class)
+////                .setParameter("user", user.getId())
+////                .getResultList();
+////        em.close();
+//        List<Order> resultList = user.getOrders();
+//        return resultList;
+//    }
 
     @Override
     public Order getOrder(int idOrder) {

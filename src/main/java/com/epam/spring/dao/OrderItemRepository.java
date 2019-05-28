@@ -1,5 +1,6 @@
 package com.epam.spring.dao;
 
+import com.epam.spring.entity.Order;
 import com.epam.spring.entity.OrderItem;
 import com.epam.spring.entity.Product;
 import com.epam.spring.entity.User;
@@ -12,7 +13,7 @@ public interface OrderItemRepository {
 
     OrderItem modifyProductQtyInOrderItem(OrderItem orderItem, User user, int qty);
 
-    List<OrderItem> getListOrderItem(int idOrderCart);
+    List<OrderItem> getListOrderItem(Order orderCart);
 
     void deleteOrderItem(OrderItem orderItem, User user);
 

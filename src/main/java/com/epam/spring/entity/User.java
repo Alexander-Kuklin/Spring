@@ -5,9 +5,8 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.ColumnTransformer;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @ToString
 @Setter
@@ -27,6 +26,9 @@ public class User extends AbstractEntity<Integer> {
     private String password;
     private String name;
     boolean active;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<Order> orders;
 
 
 }

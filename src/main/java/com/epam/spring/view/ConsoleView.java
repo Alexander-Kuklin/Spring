@@ -209,26 +209,26 @@ public class ConsoleView {
     private void showOrdersUser() {
         if (loginUser == null) {
             System.out.println("Необходимо залогиниться.");
-        } else {
-            List<Order> orderList = orderService.getListOrderUser(loginUser);
-            if (orderList.size() == 0) {
-                System.out.println("*** У пользователя нет заказов");
-                return;
-            }
-            List<OrderItem> orderItemsList;
-            for (Order order : orderList) {
-                if (order.getOrderStatus() != OrderStatus.CART) {
-                    System.out.println("Заказ № " + order.getId() + " сумма заказа:" + order.getPrice() +
-                            " статус заказа:" + order.getOrderStatus());
-                    orderItemsList = orderService.getListOrderItem(order);
-                    for (OrderItem orderItem : orderItemsList) {
-                        Product product = productService.getProductById(orderItem.getIdProduct());
-                        System.out.println("id:" + product.getId() + " Товар:" + product.getTitle() + " кол-во:" + orderItem.getQty()
-                                + " цена:" + orderItem.getPrice());
-                    }
+            return;
+        }
+        List<Order> orderList = orderService.getListOrderUser(loginUser);
+        if (orderList.size() == 0) {
+            System.out.println("*** У пользователя нет заказов");
+            return;
+        }
+        List<OrderItem> orderItemsList;
+        for (Order order : orderList) {
+            if (order.getOrderStatus() != OrderStatus.CART) {
+                System.out.println("Заказ № " + order.getId() + " сумма заказа:" + order.getPrice() +
+                        " статус заказа:" + order.getOrderStatus());
+                orderItemsList = orderService.getListOrderItem(order);
+                for (OrderItem orderItem : orderItemsList) {
+                    Product product = productService.getProductById(orderItem.getIdProduct());
+                    System.out.println("id:" + product.getId() + " Товар:" + product.getTitle() + " кол-во:" + orderItem.getQty()
+                            + " цена:" + orderItem.getPrice());
                 }
-                System.out.println();
             }
+            System.out.println();
         }
         System.out.println();
     }
