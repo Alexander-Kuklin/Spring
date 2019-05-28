@@ -1,5 +1,6 @@
-package com.epam.spring.dao;
+package com.epam.spring.dao.impl;
 
+import com.epam.spring.dao.OrderRepository;
 import com.epam.spring.entity.Order;
 import com.epam.spring.entity.OrderItem;
 import com.epam.spring.entity.OrderStatus;

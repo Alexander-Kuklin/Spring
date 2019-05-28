@@ -1,13 +1,5 @@
 <configuration>
 
-    <!--<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">-->
-    <!--<layout class="ch.qos.logback.classic.PatternLayout">-->
-    <!--<Pattern>-->
-    <!--%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n-->
-    <!--</Pattern>-->
-    <!--</layout>-->
-    <!--</appender>-->
-
     <appender name="FILE_TO_DISK" class="ch.qos.logback.core.FileAppender">
         <file>logs/consoleView.log</file>
         <encoder>
@@ -16,6 +8,12 @@
     </appender>
 
     <logger name="com.epam.spring" level="info">
+        <appender-ref ref="FILE_TO_DISK"/>
+    </logger>
+    <logger name="org.hibernate" level="info">
+        <appender-ref ref="FILE_TO_DISK"/>
+    </logger>
+    <logger name="org.hibernate.sql" level="debug">
         <appender-ref ref="FILE_TO_DISK"/>
     </logger>
 

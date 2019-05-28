@@ -10,7 +10,6 @@
 
     <bean name="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="persistenceUnitName" value="MyUnit"/>
-        <property name="dataSource" ref="basicDataSource"/>
     </bean>
 
     <bean name="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
@@ -21,24 +20,13 @@
     <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"
           name="persistenceExceptionTranslationPostProcessor"/>
 
-    <bean class="org.apache.commons.dbcp2.BasicDataSource" name="basicDataSource">
-        <property name="defaultAutoCommit" value="false"/>
-        <property name="rollbackOnReturn" value="true"/>
-        <property name="driverClassName" value="${db.driver}"/>
-        <property name="url" value="${db.url}"/>
-        <property name="username" value="${db.username}"/>
-        <property name="password" value="${db.password}"/>
-        <property name="initialSize" value="${db.pool.initSize}"/>
-        <property name="maxTotal" value="${db.pool.maxSize}"/>
-    </bean>
-
     <bean id="applicationContextProvider" class="com.epam.spring.util.ApplicationContextProvider"/>
 
-    <bean class="com.epam.spring.dao.CouponRepositoryImpl" name="couponRepository"/>
-    <bean class="com.epam.spring.dao.OrderItemRepositoryImpl" name="orderItemRepository"/>
-    <bean class="com.epam.spring.dao.OrderRepositoryImpl" name="orderRepository"/>
-    <bean class="com.epam.spring.dao.ProductRepositoryImpl" name="productRepository"/>
-    <bean class="com.epam.spring.dao.UserRepositoryImpl" name="userRepository"/>
+    <bean class="com.epam.spring.dao.impl.CouponRepositoryImpl" name="couponRepository"/>
+    <bean class="com.epam.spring.dao.impl.OrderItemRepositoryImpl" name="orderItemRepository"/>
+    <bean class="com.epam.spring.dao.impl.OrderRepositoryImpl" name="orderRepository"/>
+    <bean class="com.epam.spring.dao.impl.ProductRepositoryImpl" name="productRepository"/>
+    <bean class="com.epam.spring.dao.impl.UserRepositoryImpl" name="userRepository"/>
 
     <bean class="com.epam.spring.service.impl.ProductServiceImpl" name="productService"/>
     <bean class="com.epam.spring.service.impl.OrderServiceImpl" name="orderService"/>

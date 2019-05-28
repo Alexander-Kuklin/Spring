@@ -1,5 +1,6 @@
-package com.epam.spring.dao;
+package com.epam.spring.dao.impl;
 
+import com.epam.spring.dao.OrderItemRepository;
 import com.epam.spring.entity.OrderItem;
 import com.epam.spring.entity.Product;
 import com.epam.spring.entity.User;
@@ -30,10 +31,12 @@ public class OrderItemRepositoryImpl implements OrderItemRepository {
     public OrderItem modifyProductQtyInOrderItem(OrderItem orderItem, User user, int qty) {
         EntityManager em = entityManagerFactory.createEntityManager();
         em.getTransaction().begin();
+
         OrderItem managedOrderItem = em.find(OrderItem.class, orderItem.getId());
         managedOrderItem.setQty(qty);
         managedOrderItem.setLastModifyUser(user.getId());
         managedOrderItem.setModifyDate(MyTime.now().toLocalDateTime());
+
         em.getTransaction().commit();
         em.close();
         return managedOrderItem;

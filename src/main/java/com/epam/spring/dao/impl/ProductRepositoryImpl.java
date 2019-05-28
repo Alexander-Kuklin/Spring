@@ -1,5 +1,6 @@
-package com.epam.spring.dao;
+package com.epam.spring.dao.impl;
 
+import com.epam.spring.dao.ProductRepository;
 import com.epam.spring.entity.Product;
 import com.epam.spring.entity.ProductCategory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -177,6 +177,7 @@ public class ConsoleView {
 
         if (orderService.getListOrderItem(userCart).size() == 0) {
             System.out.println("Корзина пуста, добавьте товары");
+            return;
         }
 
         showCartUser();

@@ -1,5 +1,6 @@
-package com.epam.spring.dao;
+package com.epam.spring.dao.impl;
 
+import com.epam.spring.dao.CouponRepository;
 import com.epam.spring.entity.Coupon;
 import org.springframework.beans.factory.annotation.Autowired;
 
