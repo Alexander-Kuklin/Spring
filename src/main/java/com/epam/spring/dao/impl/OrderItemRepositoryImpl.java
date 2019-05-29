@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.transaction.Transactional;
 import java.util.List;
 
 public class OrderItemRepositoryImpl implements OrderItemRepository {
@@ -29,16 +30,17 @@ public class OrderItemRepositoryImpl implements OrderItemRepository {
     }
 
     @Override
+    @Transactional
     public OrderItem modifyProductQtyInOrderItem(OrderItem orderItem, User user, int qty) {
         EntityManager em = entityManagerFactory.createEntityManager();
-        em.getTransaction().begin();
+//        em.getTransaction().begin();
 
         OrderItem managedOrderItem = em.find(OrderItem.class, orderItem.getId());
         managedOrderItem.setQty(qty);
         managedOrderItem.setLastModifyUser(user.getId());
         managedOrderItem.setModifyDate(MyTime.now().toLocalDateTime());
 
-        em.getTransaction().commit();
+//        em.getTransaction().commit();
         em.close();
         return managedOrderItem;
     }
@@ -65,12 +67,13 @@ public class OrderItemRepositoryImpl implements OrderItemRepository {
     }
 
     @Override
+    @Transactional
     public void setOrderItemPrice(OrderItem orderItem, Product product) {
         EntityManager em = entityManagerFactory.createEntityManager();
-        em.getTransaction().begin();
+//        em.getTransaction().begin();
         OrderItem managedOrderItem = em.find(OrderItem.class, orderItem.getId());
         managedOrderItem.setPrice(product.getPrice());
-        em.getTransaction().commit();
+//        em.getTransaction().commit();
         em.close();
     }
 }

@@ -11,23 +11,31 @@ import javax.persistence.Table;
 @Getter
 @Entity
 @Table(name = "product")
-public class Product extends AbstractEntity<Integer> {
+public class Product extends AbstractEntity {
 
     private static final long serialVersionUID = 7124094868883072870L;
 
     @Column(name = "id_category")
     int idCategory;
+
     @Column(name = "alias", length = 20)
     String alias;
+
     @Column(name = "title", length = 30)
     String title;
+
     @Column(name = "text_short")
     String textShort;
+
     @Column(name = "text_full")
     String textFull;
+
     Double price;
+
     int qty;
+
     int discount;
+
     boolean active;
 
     @Override

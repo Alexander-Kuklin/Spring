@@ -33,9 +33,10 @@ public class OrderServiceImpl implements OrderService {
         checkQty(qty);
         Order userCart = getUserCart(user);
         List<OrderItem> orderItemList = orderItemRepository.getListOrderItem(userCart);
+        Product product = productRepository.getProductById(idProduct);
 
         for (OrderItem oi : orderItemList) {
-            if (oi.getIdProduct() == idProduct) {
+            if (oi.getProduct() == product) {
                 modifyProductQtyInCart(idProduct, qty, user);
                 return;
             }
@@ -43,7 +44,7 @@ public class OrderServiceImpl implements OrderService {
 
         OrderItem orderItem = new OrderItem();
         orderItem.setOrder(userCart);//setIdOrder(userCart.getId());
-        orderItem.setIdProduct(idProduct);
+        orderItem.setProduct(product);
         orderItem.setQty(qty);
         orderItem.setCreateDate(MyTime.now().toLocalDateTime());
         orderItem.setModifyDate(MyTime.now().toLocalDateTime());
@@ -55,7 +56,7 @@ public class OrderServiceImpl implements OrderService {
 
     private void modifyOrderItem(List<OrderItem> orderItemList, Order userCart, int idProduct, int qty, User user) {
         for (OrderItem oi : orderItemList) {
-            if (oi.getIdProduct() == idProduct) {
+            if (oi.getProduct().getId() == idProduct) {
                 orderItemRepository.modifyProductQtyInOrderItem(oi, user, qty);
                 refreshOrderItemPrice(oi);
                 refreshOrderPrice(userCart.getId());
@@ -66,7 +67,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void refreshOrderItemPrice(OrderItem orderItem) {
-        Product productById = productRepository.getProductById(orderItem.getIdProduct());
+        Product productById = productRepository.getProductById(orderItem.getProduct().getId());
         orderItemRepository.setOrderItemPrice(orderItem, productById);
     }
 
@@ -92,7 +93,7 @@ public class OrderServiceImpl implements OrderService {
         List<OrderItem> orderItemList = orderItemRepository.getListOrderItem(userCart);
 
         for (OrderItem oi : orderItemList) {
-            if (oi.getIdProduct() == idProduct) {
+            if (oi.getProduct().getId() == idProduct) {
                 orderItemRepository.deleteOrderItem(oi, user);
                 refreshOrderPrice(userCart.getId());
                 return;

@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @ToString
 @Entity
 @Table(name = "coupon")
-public class Coupon extends AbstractEntity<Integer> {
+public class Coupon extends AbstractEntity {
 
     private static final long serialVersionUID = -35346256235234268L;
 

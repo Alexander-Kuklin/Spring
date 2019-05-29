@@ -9,24 +9,28 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "order_item")
-public class OrderItem extends AbstractEntity<Integer> {
+public class OrderItem extends AbstractEntity {
 
     private static final long serialVersionUID = 3371622096807086892L;
 
-//    @Column(name = "id_order")
-//    private int idOrder;
-    @Column(name = "id_product")
-    private int idProduct;
+//    @Column(name = "id_product")
+//    private int idProduct;
+
     private double price;
+
     private int qty;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Order order;
+
+    @OneToOne
+    private Product product;
 
     @Override
     public String toString() {
         return "OrderItem id=" + getId() +
                 ", idOrder=" + order +
-                ", idProduct=" + idProduct +
+                ", idProduct=" + product +
                 ", price=" + price +
                 ", qty=" + qty;
     }

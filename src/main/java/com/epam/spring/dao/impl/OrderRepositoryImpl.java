@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.transaction.Transactional;
 import java.util.List;
 
 public class OrderRepositoryImpl implements OrderRepository {
@@ -49,45 +50,50 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
+    @Transactional
     public OrderItem addOrderItem(OrderItem orderItem) {
         EntityManager em = entityManagerFactory.createEntityManager();
-        em.getTransaction().begin();
+//        em.getTransaction().begin();
         em.persist(orderItem);
-        em.flush();
-        em.getTransaction().commit();
+        em.close();
+//        em.getTransaction().commit();
         return orderItem;
     }
 
     @Override
+    @Transactional
     public Order addOrder(Order order) {
         EntityManager em = entityManagerFactory.createEntityManager();
-        em.getTransaction().begin();
+//        em.getTransaction().begin();
         em.persist(order);
-        em.getTransaction().commit();
+//        em.getTransaction().commit();
         return order;
     }
 
+
     @Override
+    @Transactional
     public void changeOrderStatus(Order order, OrderStatus orderStatus, User user) {
         EntityManager em = entityManagerFactory.createEntityManager();
-        em.getTransaction().begin();
+//        em.getTransaction().begin();
         Order managedOrder = em.find(Order.class, order.getId());
         managedOrder.setOrderStatus(orderStatus);
         managedOrder.setModifyDate(MyTime.now().toLocalDateTime());
         managedOrder.setLastModifyUser(user.getId());
-        em.getTransaction().commit();
+//        em.getTransaction().commit();
         em.close();
     }
 
     @Override
+    @Transactional
     public void setOrderPrice(int idOrder, double sumPrice) {
         EntityManager em = entityManagerFactory.createEntityManager();
-        em.getTransaction().begin();
+//        em.getTransaction().begin();
         em.createQuery("UPDATE Order SET price = :price WHERE id=:id")
                 .setParameter("price", sumPrice)
                 .setParameter("id", idOrder)
                 .executeUpdate();
-        em.getTransaction().commit();
+//        em.getTransaction().commit();
         em.close();
     }
 }

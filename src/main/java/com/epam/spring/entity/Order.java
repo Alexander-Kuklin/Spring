@@ -10,7 +10,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "order_user")
-public class Order extends AbstractEntity<Integer> {
+public class Order extends AbstractEntity {
 
     private static final long serialVersionUID = 5004398605919935965L;
 

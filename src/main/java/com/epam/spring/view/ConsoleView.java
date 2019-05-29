@@ -198,7 +198,7 @@ public class ConsoleView {
 
             List<OrderItem> orderItemsList = orderService.getListOrderItem(userCart);
             for (OrderItem orderItem : orderItemsList) {
-                Product product = productService.getProductById(orderItem.getIdProduct());
+                Product product = orderItem.getProduct();//productService.getProductById(orderItem.getIdProduct());
                 System.out.println("id:" + product.getId() + " Товар:" + product.getTitle() + " кол-во:" + orderItem.getQty()
                         + " цена:" + orderItem.getPrice());
             }
@@ -223,7 +223,7 @@ public class ConsoleView {
                         " статус заказа:" + order.getOrderStatus());
                 orderItemsList = orderService.getListOrderItem(order);
                 for (OrderItem orderItem : orderItemsList) {
-                    Product product = productService.getProductById(orderItem.getIdProduct());
+                    Product product = orderItem.getProduct();//productService.getProductById(orderItem.getIdProduct());
                     System.out.println("id:" + product.getId() + " Товар:" + product.getTitle() + " кол-во:" + orderItem.getQty()
                             + " цена:" + orderItem.getPrice());
                 }
