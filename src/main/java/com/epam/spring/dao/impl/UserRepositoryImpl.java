@@ -15,16 +15,14 @@ public class UserRepositoryImpl implements UserRepository {
 
     public User getUserById(int id) {
         EntityManager em = entityManagerFactory.createEntityManager();
-        User user = em.find(User.class, id);
-        return user;
+        return em.find(User.class, id);
     }
 
     public User validateUserPassword(String email, String password) {
         EntityManager em = entityManagerFactory.createEntityManager();
         String query = "SELECT * FROM \"user\" WHERE email = ? AND password = crypt(?, password)";
-        User singleResult = (User) em.createNativeQuery(query, User.class)
+        return (User) em.createNativeQuery(query, User.class)
                 .setParameter(1, email).setParameter(2, password).getSingleResult();
-        return singleResult;
     }
 
     @Transactional

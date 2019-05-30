@@ -22,7 +22,7 @@ public class ProductServiceImpl implements ProductService {
     public Product addProduct(int idCategory, String alias, String title, String textShort, String textFull,
                               double price, int qty, User user) throws IllegalArgumentException {
         Product newProduct = new Product();
-        newProduct.setIdCategory(idCategory);
+        newProduct.setCategory(productRepository.getProductCategoryById(idCategory));
         newProduct.setAlias(alias);
         newProduct.setTitle(title);
         newProduct.setTextShort(textShort);

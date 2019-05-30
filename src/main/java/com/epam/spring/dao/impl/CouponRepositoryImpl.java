@@ -26,11 +26,9 @@ public class CouponRepositoryImpl implements CouponRepository {
     @Override
     public Coupon getCoupon(String nameCoupon) {
         EntityManager em = entityManagerFactory.createEntityManager();
-        Coupon result = em.createQuery("FROM Coupon WHERE Coupon.nameCoupon = :name", Coupon.class)
+        return em.createQuery("FROM Coupon WHERE Coupon.nameCoupon = :name", Coupon.class)
                 .setParameter("name", nameCoupon)
                 .getSingleResult();
-        em.close();
-        return result;
     }
 
     @Override

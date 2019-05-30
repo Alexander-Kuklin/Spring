@@ -20,30 +20,25 @@ public class OrderRepositoryImpl implements OrderRepository {
     public List<Order> getListOrderUserWithStatus(User user, OrderStatus orderStatus) {
         EntityManager em = entityManagerFactory.createEntityManager();
         String query = "FROM Order WHERE user = :user AND orderStatus = :orderStatus";
-        List<Order> resultList = em.createQuery(query, Order.class)
+        return em.createQuery(query, Order.class)
                 .setParameter("user", user)
                 .setParameter("orderStatus", orderStatus.getValue())
                 .getResultList();
-        return resultList;
     }
 
     @Override
     public List<Order> getListOrderUser(User user) {
         EntityManager em = entityManagerFactory.createEntityManager();
         String query = "FROM Order WHERE user.id = :user";
-        List<Order> resultList = em.createQuery(query, Order.class)
+        return em.createQuery(query, Order.class)
                 .setParameter("user", 2)
                 .getResultList();
-//        em.close();
-        return resultList;
     }
 
     @Override
     public Order getOrder(int idOrder) {
         EntityManager em = entityManagerFactory.createEntityManager();
-        Order order = em.find(Order.class, idOrder);
-//        em.close();
-        return order;
+        return em.find(Order.class, idOrder);
     }
 
     @Override
@@ -66,7 +61,6 @@ public class OrderRepositoryImpl implements OrderRepository {
         managedOrder.setModifyDate(MyTime.now().toLocalDateTime());
         managedOrder.setLastModifyUser(user.getId());
         em.getTransaction().commit();
-        em.close();
     }
 
     @Override
@@ -79,7 +73,6 @@ public class OrderRepositoryImpl implements OrderRepository {
                 .setParameter("id", idOrder)
                 .executeUpdate();
         em.getTransaction().commit();
-        em.close();
     }
 
     @Override
@@ -88,6 +81,5 @@ public class OrderRepositoryImpl implements OrderRepository {
         return em.createQuery("FROM Order WHERE user.id = :id", Order.class)
                 .setParameter("id", id)
                 .getResultList();
-
     }
 }

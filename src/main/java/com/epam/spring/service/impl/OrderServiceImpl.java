@@ -62,7 +62,6 @@ public class OrderServiceImpl implements OrderService {
                 oi.setLastModifyUser(user.getId());
                 oi.setModifyDate(MyTime.now().toLocalDateTime());
                 orderItemRepository.mergeEntity(oi);
-//                orderItemRepository.modifyProductQtyInOrderItem(oi, user, qty);
                 refreshOrderItemPrice(oi);
                 refreshOrderPrice(userCart.getId());
                 return;
@@ -72,7 +71,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void refreshOrderItemPrice(OrderItem orderItem) {
-//        Product productById = productRepository.getProductById(orderItem.getProduct().getId());
         orderItemRepository.setOrderItemPrice(orderItem, orderItem.getProduct());
     }
 
@@ -83,7 +81,6 @@ public class OrderServiceImpl implements OrderService {
             return;
         }
         Order userCart = getUserCart(user);
-//        List<OrderItem> orderItemList = orderItemRepository.getListOrderItem(userCart);
 
         if (userCart.getOrderItem().size() == 0) {
             throw ExceptionFactory.getIllegalArgumentException("User cart is empty");
@@ -122,7 +119,7 @@ public class OrderServiceImpl implements OrderService {
         if (listOrders.size() == 0) {
             Order order = new Order();
             order.setOrderStatus(OrderStatus.CART.getValue());
-            order.setUser(user);//setIdUser(user.getId());
+            order.setUser(user);
             order.setCreateDate(MyTime.now().toLocalDateTime());
             order.setModifyDate(MyTime.now().toLocalDateTime());
             order.setLastModifyUser(user.getId());
@@ -142,7 +139,7 @@ public class OrderServiceImpl implements OrderService {
     public Coupon addCoupon(int idCategory, String nameCoupon, boolean percent, int discount, int minSum,
                             LocalDate startDateDiscount, LocalDate endDateDiscount, User user) {
         Coupon newCoupon = new Coupon();
-        newCoupon.setIdCategory(idCategory);
+        newCoupon.setCategory(productRepository.getProductCategoryById(idCategory));
         newCoupon.setNameCoupon(nameCoupon);
         newCoupon.setPercent(percent);
         newCoupon.setDiscount(discount);

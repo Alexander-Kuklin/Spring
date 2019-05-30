@@ -25,7 +25,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public List<Product> getListProductByCategory(int idCategory) {
         EntityManager em = entityManagerFactory.createEntityManager();
-        List<Product> productList = em.createQuery("from Product where idCategory = :idCategory", Product.class)
+        List<Product> productList = em.createQuery("from Product where category.id = :idCategory", Product.class)
                 .setParameter("idCategory", idCategory)
                 .getResultList();
         em.close();

@@ -34,9 +34,8 @@ public class Order extends AbstractEntity {
 
     @Column(name = "orderStatus_id")
     int orderStatus;
-//    OrderStatus orderStatus;
 
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)//
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
     private User user;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)

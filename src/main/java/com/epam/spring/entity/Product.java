@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Setter
@@ -15,45 +16,26 @@ public class Product extends AbstractEntity {
 
     private static final long serialVersionUID = 7124094868883072870L;
 
-    @Column(name = "id_category")
-    int idCategory;
+    @OneToOne
+    private ProductCategory category;
 
     @Column(name = "alias", length = 20)
-    String alias;
+    private String alias;
 
     @Column(name = "title", length = 30)
-    String title;
+    private String title;
 
     @Column(name = "text_short")
-    String textShort;
+    private String textShort;
 
     @Column(name = "text_full")
-    String textFull;
+    private String textFull;
 
-    Double price;
+    private Double price;
 
-    int qty;
+    private int qty;
 
-    int discount;
+    private int discount;
 
-    boolean active;
-
-    @Override
-    public String toString() {
-        return "Product{" +
-                "id=" + getId() +
-                ", idCategory=" + idCategory +
-                ", alias='" + alias + '\'' +
-                ", title='" + title + '\'' +
-                ", textShort='" + textShort + '\'' +
-                ", textFull='" + textFull + '\'' +
-                ", price=" + price +
-                ", qty=" + qty +
-                ", discount=" + discount +
-                ", active=" + active +
-                ", createDate = " + getCreateDate() +
-                ", modifyDate = " + getModifyDate() +
-                ", lastModifyUserId = " + getLastModifyUser() +
-                "}\n";
-    }
+    private boolean active;
 }

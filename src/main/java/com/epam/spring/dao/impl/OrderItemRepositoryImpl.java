@@ -53,10 +53,9 @@ public class OrderItemRepositoryImpl implements OrderItemRepository {
     @Override
     public List<OrderItem> getListOrderItem(Order orderCart) {
         EntityManager em = entityManagerFactory.createEntityManager();
-        List<OrderItem> resultList = em.createQuery("from OrderItem where order = :idOrder", OrderItem.class)
+        return em.createQuery("from OrderItem where order = :idOrder", OrderItem.class)
                 .setParameter("idOrder", orderCart)
                 .getResultList();
-        return resultList;
     }
 
     @Override

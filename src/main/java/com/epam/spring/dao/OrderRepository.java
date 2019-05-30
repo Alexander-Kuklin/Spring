@@ -16,8 +16,6 @@ public interface OrderRepository {
 
     <T> T addEntity(T orderItem);
 
-//    Order addOrder(Order order);
-
     void changeOrderStatus(Order order, OrderStatus orderStatus, User user);
 
     void setOrderPrice(int idOrder, double sumPrice);

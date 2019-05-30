@@ -6,6 +6,7 @@ import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.time.LocalDate;
 
@@ -18,8 +19,8 @@ public class Coupon extends AbstractEntity {
 
     private static final long serialVersionUID = -35346256235234268L;
 
-    @Column(name = "id_product_category")
-    private int idCategory;
+    @OneToOne
+    private ProductCategory category;
 
     @Column(name = "coupon", length = 15)
     private String nameCoupon;
