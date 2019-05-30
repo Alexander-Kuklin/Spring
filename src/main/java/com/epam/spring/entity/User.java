@@ -2,13 +2,11 @@ package com.epam.spring.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.ColumnTransformer;
 
 import javax.persistence.*;
 import java.util.List;
 
-@ToString
 @Setter
 @Getter
 @Entity

@@ -13,14 +13,12 @@ public class OrderItem extends AbstractEntity {
 
     private static final long serialVersionUID = 3371622096807086892L;
 
-//    @Column(name = "id_product")
-//    private int idProduct;
-
     private double price;
 
     private int qty;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Order.class)
+    @JoinColumn(name = "order_id")
     private Order order;
 
     @OneToOne

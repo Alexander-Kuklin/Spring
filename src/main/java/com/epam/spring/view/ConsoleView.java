@@ -218,7 +218,7 @@ public class ConsoleView {
         }
         List<OrderItem> orderItemsList;
         for (Order order : orderList) {
-            if (order.getOrderStatus() != OrderStatus.CART) {
+            if (order.getOrderStatus() != OrderStatus.CART.getValue()) {
                 System.out.println("Заказ № " + order.getId() + " сумма заказа:" + order.getPrice() +
                         " статус заказа:" + order.getOrderStatus());
                 orderItemsList = orderService.getListOrderItem(order);

@@ -32,32 +32,37 @@ public class OrderServiceImpl implements OrderService {
     public void addProductQtyInCart(int idProduct, int qty, User user) {
         checkQty(qty);
         Order userCart = getUserCart(user);
-        List<OrderItem> orderItemList = orderItemRepository.getListOrderItem(userCart);
+        //List<OrderItem> orderItemList = orderItemRepository.getListOrderItem(userCart);
         Product product = productRepository.getProductById(idProduct);
 
-        for (OrderItem oi : orderItemList) {
-            if (oi.getProduct() == product) {
-                modifyProductQtyInCart(idProduct, qty, user);
+        for (OrderItem oi : userCart.getOrderItem()) {
+            if (oi.getProduct().getId() == product.getId()) {
+                modifyOrderItem(userCart, idProduct, qty, user);
                 return;
             }
         }
 
         OrderItem orderItem = new OrderItem();
-        orderItem.setOrder(userCart);//setIdOrder(userCart.getId());
+        orderItem.setOrder(userCart);
         orderItem.setProduct(product);
         orderItem.setQty(qty);
+        orderItem.setPrice(product.getPrice());
         orderItem.setCreateDate(MyTime.now().toLocalDateTime());
         orderItem.setModifyDate(MyTime.now().toLocalDateTime());
         orderItem.setLastModifyUser(user.getId());
 
-        refreshOrderItemPrice(orderRepository.addOrderItem(orderItem));
+        refreshOrderItemPrice(orderRepository.addEntity(orderItem));
         refreshOrderPrice(userCart.getId());
     }
 
-    private void modifyOrderItem(List<OrderItem> orderItemList, Order userCart, int idProduct, int qty, User user) {
-        for (OrderItem oi : orderItemList) {
+    private void modifyOrderItem(Order userCart, int idProduct, int qty, User user) {
+        for (OrderItem oi : userCart.getOrderItem()) {
             if (oi.getProduct().getId() == idProduct) {
-                orderItemRepository.modifyProductQtyInOrderItem(oi, user, qty);
+                oi.setQty(qty);
+                oi.setLastModifyUser(user.getId());
+                oi.setModifyDate(MyTime.now().toLocalDateTime());
+                orderItemRepository.mergeEntity(oi);
+//                orderItemRepository.modifyProductQtyInOrderItem(oi, user, qty);
                 refreshOrderItemPrice(oi);
                 refreshOrderPrice(userCart.getId());
                 return;
@@ -67,8 +72,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void refreshOrderItemPrice(OrderItem orderItem) {
-        Product productById = productRepository.getProductById(orderItem.getProduct().getId());
-        orderItemRepository.setOrderItemPrice(orderItem, productById);
+//        Product productById = productRepository.getProductById(orderItem.getProduct().getId());
+        orderItemRepository.setOrderItemPrice(orderItem, orderItem.getProduct());
     }
 
     public void modifyProductQtyInCart(int idProduct, int qty, User user) {
@@ -78,13 +83,13 @@ public class OrderServiceImpl implements OrderService {
             return;
         }
         Order userCart = getUserCart(user);
-        List<OrderItem> orderItemList = orderItemRepository.getListOrderItem(userCart);
+//        List<OrderItem> orderItemList = orderItemRepository.getListOrderItem(userCart);
 
-        if (orderItemList.size() == 0) {
+        if (userCart.getOrderItem().size() == 0) {
             throw ExceptionFactory.getIllegalArgumentException("User cart is empty");
         }
 
-        modifyOrderItem(orderItemList, userCart, idProduct, qty, user);
+        modifyOrderItem(userCart, idProduct, qty, user);
 
     }
 
@@ -107,16 +112,21 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.changeOrderStatus(order, OrderStatus.WAITING_TO_BE_CHECKED, user);
     }
 
+    @Override
+    public List<Order> getListOrderUserById(int id) {
+        return orderRepository.getListOrderUserById(id);
+    }
+
     public Order getUserCart(User user) {
         List<Order> listOrders = orderRepository.getListOrderUserWithStatus(user, OrderStatus.CART);
         if (listOrders.size() == 0) {
             Order order = new Order();
-            order.setOrderStatus(OrderStatus.CART);
+            order.setOrderStatus(OrderStatus.CART.getValue());
             order.setUser(user);//setIdUser(user.getId());
             order.setCreateDate(MyTime.now().toLocalDateTime());
             order.setModifyDate(MyTime.now().toLocalDateTime());
             order.setLastModifyUser(user.getId());
-            return orderRepository.addOrder(order);
+            return orderRepository.addEntity(order);
         }
         return listOrders.get(0);
     }
@@ -126,7 +136,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public List<Order> getListOrderUser(User user) {
-        return user.getOrders();
+        return orderRepository.getListOrderUser(user);
     }
 
     public Coupon addCoupon(int idCategory, String nameCoupon, boolean percent, int discount, int minSum,

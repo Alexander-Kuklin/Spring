@@ -3,12 +3,10 @@ package com.epam.spring.entity;
 import com.epam.spring.exception.ExceptionFactory;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
-@Entity
-@Table(name = "order_status")
+//@Entity
+//@Table(name = "order_status")
 public enum OrderStatus {
     CART(0),
     WAITING_TO_BE_CHECKED(1),

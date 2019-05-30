@@ -7,6 +7,13 @@
         </encoder>
     </appender>
 
+    <appender name="LOG_HIBERNATE" class="ch.qos.logback.core.FileAppender">
+        <file>logs/Hibernate.log</file>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <logger name="com.epam.spring" level="info">
         <appender-ref ref="FILE_TO_DISK"/>
     </logger>
@@ -15,6 +22,9 @@
     </logger>
     <logger name="org.hibernate.sql" level="debug">
         <appender-ref ref="FILE_TO_DISK"/>
+    </logger>
+    <logger name="org.hibernate.type" level="all">
+        <appender-ref ref="LOG_HIBERNATE"/>
     </logger>
 
 </configuration>

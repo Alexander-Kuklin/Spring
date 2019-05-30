@@ -2,7 +2,6 @@ package com.epam.spring.dao.impl;
 
 import com.epam.spring.dao.OrderRepository;
 import com.epam.spring.entity.Order;
-import com.epam.spring.entity.OrderItem;
 import com.epam.spring.entity.OrderStatus;
 import com.epam.spring.entity.User;
 import com.epam.spring.util.MyTime;
@@ -23,64 +22,50 @@ public class OrderRepositoryImpl implements OrderRepository {
         String query = "FROM Order WHERE user = :user AND orderStatus = :orderStatus";
         List<Order> resultList = em.createQuery(query, Order.class)
                 .setParameter("user", user)
-                .setParameter("orderStatus", orderStatus)
+                .setParameter("orderStatus", orderStatus.getValue())
                 .getResultList();
-        em.close();
         return resultList;
     }
 
-//    @Override
-//    public List<Order> getListOrderUser(User user) {
-////        EntityManager em = entityManagerFactory.createEntityManager();
-////        String query = "FROM Order WHERE user = :user";
-////        List<Order> resultList = em.createQuery(query, Order.class)
-////                .setParameter("user", user.getId())
-////                .getResultList();
-////        em.close();
-//        List<Order> resultList = user.getOrders();
-//        return resultList;
-//    }
+    @Override
+    public List<Order> getListOrderUser(User user) {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        String query = "FROM Order WHERE user.id = :user";
+        List<Order> resultList = em.createQuery(query, Order.class)
+                .setParameter("user", 2)
+                .getResultList();
+//        em.close();
+        return resultList;
+    }
 
     @Override
     public Order getOrder(int idOrder) {
         EntityManager em = entityManagerFactory.createEntityManager();
         Order order = em.find(Order.class, idOrder);
-        em.close();
+//        em.close();
         return order;
     }
 
     @Override
     @Transactional
-    public OrderItem addOrderItem(OrderItem orderItem) {
+    public <T> T addEntity(T orderItem) {
         EntityManager em = entityManagerFactory.createEntityManager();
-//        em.getTransaction().begin();
+        em.getTransaction().begin();
         em.persist(orderItem);
-        em.close();
-//        em.getTransaction().commit();
+        em.getTransaction().commit();
         return orderItem;
     }
 
     @Override
     @Transactional
-    public Order addOrder(Order order) {
-        EntityManager em = entityManagerFactory.createEntityManager();
-//        em.getTransaction().begin();
-        em.persist(order);
-//        em.getTransaction().commit();
-        return order;
-    }
-
-
-    @Override
-    @Transactional
     public void changeOrderStatus(Order order, OrderStatus orderStatus, User user) {
         EntityManager em = entityManagerFactory.createEntityManager();
-//        em.getTransaction().begin();
+        em.getTransaction().begin();
         Order managedOrder = em.find(Order.class, order.getId());
-        managedOrder.setOrderStatus(orderStatus);
+        managedOrder.setOrderStatus(orderStatus.getValue());
         managedOrder.setModifyDate(MyTime.now().toLocalDateTime());
         managedOrder.setLastModifyUser(user.getId());
-//        em.getTransaction().commit();
+        em.getTransaction().commit();
         em.close();
     }
 
@@ -88,12 +73,21 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Transactional
     public void setOrderPrice(int idOrder, double sumPrice) {
         EntityManager em = entityManagerFactory.createEntityManager();
-//        em.getTransaction().begin();
+        em.getTransaction().begin();
         em.createQuery("UPDATE Order SET price = :price WHERE id=:id")
                 .setParameter("price", sumPrice)
                 .setParameter("id", idOrder)
                 .executeUpdate();
-//        em.getTransaction().commit();
+        em.getTransaction().commit();
         em.close();
+    }
+
+    @Override
+    public List<Order> getListOrderUserById(int id) {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        return em.createQuery("FROM Order WHERE user.id = :id", Order.class)
+                .setParameter("id", id)
+                .getResultList();
+
     }
 }

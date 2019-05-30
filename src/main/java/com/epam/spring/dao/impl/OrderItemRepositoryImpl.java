@@ -21,28 +21,33 @@ public class OrderItemRepositoryImpl implements OrderItemRepository {
     @Override
     public double getOrderSumPrice(int idOrder) {
         EntityManager em = entityManagerFactory.createEntityManager();
-        Double result = em.createQuery("SELECT SUM(price*qty) FROM OrderItem WHERE order = :id", Double.class)
+        Double result = em.createQuery("SELECT SUM(price*qty) FROM OrderItem WHERE order.id = :id", Double.class)
                 .setParameter("id", idOrder)
                 .getSingleResult();
-        em.close();
+
         if (result == null) return 0;
         return result;
     }
 
-    @Override
-    @Transactional
+    @Deprecated
+    @Transactional(Transactional.TxType.REQUIRED)
     public OrderItem modifyProductQtyInOrderItem(OrderItem orderItem, User user, int qty) {
         EntityManager em = entityManagerFactory.createEntityManager();
-//        em.getTransaction().begin();
 
         OrderItem managedOrderItem = em.find(OrderItem.class, orderItem.getId());
         managedOrderItem.setQty(qty);
         managedOrderItem.setLastModifyUser(user.getId());
         managedOrderItem.setModifyDate(MyTime.now().toLocalDateTime());
 
-//        em.getTransaction().commit();
-        em.close();
         return managedOrderItem;
+    }
+
+    public <T> T mergeEntity(T entity) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+        T mergeEntity = entityManager.merge(entity);
+        entityManager.getTransaction().commit();
+        return mergeEntity;
     }
 
     @Override
@@ -51,29 +56,26 @@ public class OrderItemRepositoryImpl implements OrderItemRepository {
         List<OrderItem> resultList = em.createQuery("from OrderItem where order = :idOrder", OrderItem.class)
                 .setParameter("idOrder", orderCart)
                 .getResultList();
-        em.close();
         return resultList;
     }
 
     @Override
+    @Transactional
     public void deleteOrderItem(OrderItem orderItem, User user) {
         EntityManager em = entityManagerFactory.createEntityManager();
+
         em.getTransaction().begin();
         em.createQuery("DELETE FROM OrderItem AS oi WHERE oi.id = :id")
                 .setParameter("id", orderItem.getId())
                 .executeUpdate();
         em.getTransaction().commit();
-        em.close();
     }
 
     @Override
     @Transactional
     public void setOrderItemPrice(OrderItem orderItem, Product product) {
         EntityManager em = entityManagerFactory.createEntityManager();
-//        em.getTransaction().begin();
-        OrderItem managedOrderItem = em.find(OrderItem.class, orderItem.getId());
+        OrderItem managedOrderItem = em.merge(orderItem);
         managedOrderItem.setPrice(product.getPrice());
-//        em.getTransaction().commit();
-        em.close();
     }
 }

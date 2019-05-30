@@ -30,15 +30,4 @@ public class ProductCategory extends AbstractEntity {
 
     boolean active;
 
-    public ProductCategory() {
-    }
-
-//    public ProductCategory(int id, int idParent, String alias, String title, String text, boolean active) {
-//        super(id);
-//        this.idParent = idParent;
-//        this.alias = alias;
-//        this.title = title;
-//        this.text = text;
-//        this.active = active;
-//    }
 }

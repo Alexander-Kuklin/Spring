@@ -27,4 +27,6 @@ public interface OrderService {
 
     void confirmOrderCart(Order order, User user);
 
+    List<Order> getListOrderUserById(int i);
+
 }

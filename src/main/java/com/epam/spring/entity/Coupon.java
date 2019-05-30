@@ -20,14 +20,20 @@ public class Coupon extends AbstractEntity {
 
     @Column(name = "id_product_category")
     private int idCategory;
+
     @Column(name = "coupon", length = 15)
     private String nameCoupon;
+
     private boolean percent;
+
     private int discount;
+
     @Column(name = "min_sum")
     private int minSum;
+
     @Column(name = "start_date_discount")
     private LocalDate startDateDiscount;
+
     @Column(name = "stop_date_discount")
     private LocalDate endDateDiscount;
 }

@@ -11,7 +11,9 @@ public interface OrderItemRepository {
 
     double getOrderSumPrice(int idOrder);
 
-    OrderItem modifyProductQtyInOrderItem(OrderItem orderItem, User user, int qty);
+    //OrderItem modifyProductQtyInOrderItem(OrderItem orderItem, User user, int qty);
+
+    <T> T mergeEntity(T entity);
 
     List<OrderItem> getListOrderItem(Order orderCart);
 

@@ -6,4 +6,6 @@ public interface UserService {
 
     User validateUserPassword(String login, String password);
 
+    User getUserById(int id);
+
 }
